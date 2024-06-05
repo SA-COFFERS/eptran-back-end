@@ -1,12 +1,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('user', {
       user_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+      },
+      user_fk_image_path: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'user_image', key: 'user_image_id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       user_name: {
         type: Sequelize.STRING,
