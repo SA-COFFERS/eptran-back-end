@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('game-statistics', {
+    await queryInterface.createTable('game_statistics', {
       game_statistics_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -46,6 +46,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('game-statistics');
+    await queryInterface.dropTable('game_statistics');
   },
 };

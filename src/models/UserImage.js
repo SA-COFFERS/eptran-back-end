@@ -9,10 +9,10 @@ class UserImage extends Model {
     });
   }
 
-  // static associate(models) {
-  //   this.belongsTo(models.User, { foreignKey: 'user_fk_image_path' });
-  //   this.hasOne(models.User, { foreignKey: 'user_image_fk_user' });
-  // }
+  static associate(models) {
+    this.hasOne(models.User, { foreignKey: 'user_fk_image_path' });
+    this.belongsTo(models.User, { foreignKey: 'user_image_fk_user' });
+  }
 }
 
 module.exports = UserImage;

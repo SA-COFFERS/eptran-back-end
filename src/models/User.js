@@ -16,10 +16,10 @@ class User extends Model {
     });
   }
 
-  // static associate(models) {
-  //   this.hasOne(models.UserImage, { foreignKey: 'user_fk_image_path' });
-  //   this.belongsToMany(models.UserImage, { foreignKey: 'user_image_fk_user' });
-  // }
+  static associate(models) {
+    this.belongsTo(models.UserImage, { foreignKey: 'user_fk_image_path' });
+    this.hasMany(models.UserImage, { foreignKey: 'user_image_fk_user' });
+  }
 }
 
 module.exports = User;
