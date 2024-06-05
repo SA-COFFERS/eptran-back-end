@@ -17,10 +17,22 @@ module.exports = {
       },
       game_statistics_fk_game: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: { model: 'game', key: 'game_id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      game_statistics_time_spent: {
+        type: Sequelize.TIME,
+        allowNull: true,
+      },
+      game_statistics_progress: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      game_statistics_fastest_time: {
+        type: Sequelize.TIME,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
