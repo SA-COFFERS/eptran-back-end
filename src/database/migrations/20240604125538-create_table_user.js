@@ -8,17 +8,37 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      name: {
+      user_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
+      user_lastname: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      user_email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      password: {
+      user_password: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      user_birthdate: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+      },
+      user_sex: {
+        type: Sequelize.ENUM('male', 'female', 'other'),
+        allowNull: false,
+      },
+      user_education: {
+        type: Sequelize.ENUM('elementary_1', 'elementary_2', 'highschool'),
+        allowNull: false,
+      },
+      user_permission: {
+        type: Sequelize.ENUM('adm', 'staff', 'user'),
         allowNull: false,
       },
       created_at: {
