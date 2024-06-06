@@ -10,10 +10,10 @@ module.exports = {
       },
       user_fk_image_path: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: { model: 'user_image', key: 'user_image_id' },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       user_name: {
         type: Sequelize.STRING,
