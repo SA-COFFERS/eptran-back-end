@@ -3,6 +3,11 @@ const { Model, DataTypes } = require('sequelize');
 class User extends Model {
   static init(sequelize) {
     super.init({
+      user_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       user_name: DataTypes.STRING,
       user_lastname: DataTypes.STRING,
       user_email: DataTypes.STRING,
@@ -13,6 +18,7 @@ class User extends Model {
       user_permission: DataTypes.ENUM('adm', 'staff', 'user'),
     }, {
       sequelize,
+      tableName: 'user',
     });
   }
 
