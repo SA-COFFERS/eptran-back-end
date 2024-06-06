@@ -1,12 +1,15 @@
 const express = require('express');
 
+// Controllers
+const userController = require('./controller/userController');
+
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');
 
 const routes = express.Router();
 
 // User
-routes.get('/', (req, res) => res.json({ msg: 'Hello World' }));
+routes.post('/user/register', userController.create);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {
