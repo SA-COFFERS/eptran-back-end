@@ -8,6 +8,7 @@ class User extends Model {
         primaryKey: true,
         autoIncrement: true,
       },
+      user_image_path: DataTypes.STRING,
       user_name: DataTypes.STRING,
       user_lastname: DataTypes.STRING,
       user_email: DataTypes.STRING,
@@ -23,11 +24,6 @@ class User extends Model {
       sequelize,
       tableName: 'user',
     });
-  }
-
-  static associate(models) {
-    this.belongsTo(models.UserImage, { foreignKey: 'user_fk_image_path' });
-    this.hasMany(models.UserImage, { foreignKey: 'user_image_fk_user' });
   }
 }
 

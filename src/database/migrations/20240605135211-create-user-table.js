@@ -8,12 +8,9 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      user_fk_image_path: {
-        type: Sequelize.INTEGER,
+      user_image_path: {
+        type: Sequelize.STRING,
         allowNull: true,
-        references: { model: 'user_image', key: 'user_image_id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       user_name: {
         type: Sequelize.STRING,

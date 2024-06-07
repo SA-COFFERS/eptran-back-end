@@ -3,9 +3,8 @@ const dbConfig = require('../config/database');
 
 // Models
 const User = require('../models/User');
-const UserImage = require('../models/UserImage');
 
-const models = [User, UserImage];
+const models = [User];
 
 const connection = new Sequelize(dbConfig);
 
