@@ -1,5 +1,6 @@
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 // Register user
@@ -13,7 +14,6 @@ exports.create = async (req, res) => {
     user_birthdate,
     user_sex,
     user_education,
-    user_permission,
   } = req.body;
   console.log(req.body);
 
@@ -51,11 +51,46 @@ exports.create = async (req, res) => {
       user_birthdate,
       user_sex,
       user_education,
-      user_permission,
     });
 
     return res.json(newUser);
   } catch (error) {
-    return res.status(500).json({ msg: 'Error creating a new user!' });
+    return res.status(500).json({ msg: 'Erro ao criar o usuário.' });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) return res.status(400).json({ msg: 'Preencha todos os campos.' });
+
+  // Validate if user exists
+  const user = await User.findOne({ where: { user_email: email } });
+  if (!user) return res.status(400).json({ msg: 'Usuário não existe' });
+
+  // Validate if password is correct
+  const passwordIsValid = await bcryptjs.compare(password, user.user_password);
+  if (!passwordIsValid) return res.status(422).json({ msg: 'Senha Incorreta.' });
+
+  try {
+    const { user_id, user_permission } = user;
+    const secret = process.env.TOKEN_SECRET;
+    const expiration = process.env.TOKEN_EXPIRATION;
+    // Generate token
+    const token = jwt.sign(
+      {
+        user_id,
+        user_email: email,
+        user_permission,
+      },
+      secret,
+      {
+        expiresIn: expiration,
+      },
+    );
+
+    return res.json({ token, user });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
   }
 };

@@ -1,27 +1,33 @@
 const jwt = require('jsonwebtoken');
-// const User = require('../models/User');
+const User = require('../models/User');
 
 const loginRequired = async (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization) return res.status(401).json({ msg: 'You must be logged in' });
+  // verify if an authorization was sent
+  if (!authorization) return res.status(401).json({ msg: 'Você deve estar logado.' });
 
   const [, token] = authorization.split(' ');
 
   try {
+    // Verify token, and get data
     const data = jwt.verify(token, process.env.TOKEN_SECRET);
-    const { id, email } = data;
 
-    // const user = await User.findOne({ where: { id, email } });
+    // Destructuring data
+    const { user_id, user_email, user_permission } = data;
 
-    // if (!user) return res.status(401).json({ msg: 'Invalid User.' });
+    // Verify if user exists
+    const user = await User.findOne({ where: { user_id, user_email } });
+    if (!user) return res.status(401).json({ msg: 'Usuário Inválido.' });
 
-    req.userId = id;
-    req.userEmail = email;
+    // Set global variables
+    req.userId = user_id;
+    req.userEmail = user_email;
+    req.userPermission = user_permission;
 
     return next();
   } catch {
-    return res.status(401).json({ msg: 'Expired or invalid session.' });
+    return res.status(401).json({ msg: 'Sessão expirada ou inválida.' });
   }
 };
 
