@@ -15,7 +15,6 @@ exports.create = async (req, res) => {
     user_sex,
     user_education,
   } = req.body;
-  console.log(req.body);
 
   // eslint-disable-next-line max-len
   if (!user_name || !user_email || !user_password || !confirmpassword || !user_lastname || !user_birthdate || !user_education || !user_sex) {
@@ -91,6 +90,15 @@ exports.login = async (req, res) => {
     );
     user.user_password = undefined;
     return res.json({ token, user });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
+  }
+};
+
+exports.index = async (req, res) => {
+  const users = await User.findAll({ attributes: { exclude: ['user_password'] } });
+  try {
+    return res.json({ users });
   } catch (error) {
     return res.status(500).json({ msg: 'Erro do Servidor.' });
   }
