@@ -11,7 +11,7 @@ services:
       ports:
         - "3306:3306"
       expose:
-        - 3307
+        - 3306
       volumes:
         - /usr/app/var/lib/mysql
       healthcheck:
@@ -19,6 +19,7 @@ services:
             timeout: 5s
             retries: 10
   app:
+    restart: always
     depends_on:
       mysqldb:
         condition: service_healthy
@@ -28,3 +29,16 @@ services:
       - "5000:5000"
     volumes:
       - .:/usr/app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    links:
+      - mysqldb
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysqldb
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+
