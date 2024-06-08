@@ -53,7 +53,8 @@ exports.create = async (req, res) => {
       user_education,
     });
 
-    return res.json(newUser);
+    newUser.user_password = undefined;
+    return res.json({ newUser });
   } catch (error) {
     return res.status(500).json({ msg: 'Erro ao criar o usuário.' });
   }
@@ -88,7 +89,7 @@ exports.login = async (req, res) => {
         expiresIn: expiration,
       },
     );
-
+    user.user_password = undefined;
     return res.json({ token, user });
   } catch (error) {
     return res.status(500).json({ msg: 'Erro do Servidor.' });
