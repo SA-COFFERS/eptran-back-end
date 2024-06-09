@@ -194,17 +194,13 @@ exports.delete = async (req, res) => {
 
 exports.upload = async (req, res) => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId); // Find user based on id got by token
     if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
 
     const { file } = req;
-    if (!file) {
-      return res
-        .status(400)
-        .json({ msg: 'Nenhum arquivo de imagem foi enviado.' });
-    }
+    if (!file) return res.status(400).json({ msg: 'Nenhum arquivo de imagem foi enviado.' }); // verify if a file was sent
 
-    await user.update({ user_image_path: file.path });
+    await user.update({ user_image_path: file.path }); // add the image path to the user
 
     return res.json({ msg: 'Imagem de perfil do usuário atualizada com sucesso', file });
   } catch (error) {
@@ -214,9 +210,10 @@ exports.upload = async (req, res) => {
 
 exports.removeimage = async (req, res) => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId); // Find user based on id got by token
     if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
 
+    // fuction to remove image from uploads before setting the image path null
     const deleteFile = (filePath) => {
       // eslint-disable-next-line consistent-return
       fs.unlink(filePath, (error) => {
@@ -224,9 +221,9 @@ exports.removeimage = async (req, res) => {
       });
     };
 
-    deleteFile(user.user_image_path);
+    deleteFile(user.user_image_path); // call the delete fuction and give the path to delete them
 
-    await user.update({ user_image_path: null });
+    await user.update({ user_image_path: null }); // set image path as null
 
     return res.json({ msg: 'Imagem de perfil do usuário removida com sucesso' });
   } catch (error) {
