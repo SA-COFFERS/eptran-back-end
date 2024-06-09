@@ -7,13 +7,14 @@ const newsController = require('./controllers/newsController');
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');
 const isStaff = require('./middlewares/isStaff');
+const isAdmin = require('./middlewares/isAdmin');
 const upload = require('./config/multer');
 
 const routes = express.Router();
 
 // User
-routes.get('/users/index', userController.index);
-routes.get('/users/id/:id', userController.show);
+routes.get('/users/index', isAdmin, userController.index);
+routes.get('/users/id/:id', isAdmin, userController.show);
 routes.post('/users/register', userController.create);
 routes.post('/users/login', userController.login);
 routes.put('/users/update', loginRequired, userController.update);

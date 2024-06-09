@@ -1,0 +1,665 @@
+{
+  "openapi":"3.1.0",
+  "info":{
+    "title":"Eptran API",
+    "description":"API de controle de usuários, notícias e jogos do Eptran.",
+    "contact":{
+      "email":"eptran@joinville.sc.gov.br",
+      "name":"Eptran"
+    },
+    "version":"1.0.0"
+  },
+  "servers": [
+    {
+      "url":"http://localhost:5000",
+      "description": "API"
+    }
+  ],
+  "paths": {
+    "/users/register":{
+      "post":{
+        "summary":"Cadastro de usuário",
+        "description":"Essa é a rota responsável por cadastrar um novo usuário",
+        "tags":["Users"],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "$ref":"#/components/schemas/RegisterUser"
+              }
+            }
+          }
+        },
+        "responses":{
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "type":"object",
+                  "$ref": "#/components/schemas/ReturnUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login":{
+      "post":{
+        "summary":"Login de usuário",
+        "description":"Essa é a rota responsável por gerar o token do usuário",
+        "tags":["Users"],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "properties":{
+                  "email":{
+                    "type":"string",
+                    "format":"email"
+                  },
+                  "password":{
+                    "type":"string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "properties":{
+                    "token":{
+                      "type":"string"
+                    },
+                    "user":{
+                      "$ref":"#/components/schemas/ReturnUser"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/index":{
+      "get":{
+        "summary":"Listar usuários",
+        "description":"Essa rota é responsável por listar todos os usuários",
+        "tags":["Users"],
+        "security": [{"bearerAuth": []}],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "array",
+                "items":{
+                  "$ref": "#/components/schemas/ReturnUser"
+                }
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/users/id/{id}":{
+      "get":{
+        "summary":"Buscar usuário por ID",
+        "security": [{"bearerAuth": []}],
+        "description":"Essa é a rota responsável por buscar um usuário pelo seu ID",
+        "tags":["Users"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do usuário",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "object",
+                "$ref": "#/components/schemas/ReturnUser"
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/users/update":{
+      "put":{
+        "summary":"Atualização de usuário",
+        "description":"Essa é a rota responsável por atualizar as informações do usuário.",
+        "tags":["Users"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "$ref":"#/components/schemas/RegisterUser",
+                "example":{
+                  "user_name": "",
+                  "user_lastname": "",
+                  "user_email": "",
+                  "user_password": "",
+                  "confirmpassword": "",
+                  "user_birthdate": "",
+                  "user_sex": "",
+                  "user_education": ""
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "properties":{
+                    "user":{
+                      "$ref":"#/components/schemas/ReturnUser"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/delete":{
+      "delete":{
+        "summary":"Deletar usuário",
+        "description":"Essa é a rota responsável por deletar o usuário",
+        "tags":["Users"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "properties":{
+                  "password":{
+                    "type":"string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "properties":{
+                    "user":{
+                      "$ref":"#/components/schemas/ReturnUser"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/upload":{
+      "put":{
+        "summary":"Imagem de perfil do usuário",
+        "description":"Essa rota é responsável pelo upload da imagem de perfil do usuário",
+        "tags":["Users"],
+        "security": [{"bearerAuth": []}],
+        "requestBody":{
+          "content":{
+            "multipart/form-data":{
+              "schema":{
+                "type":"object",
+                "properties":{
+                  "file":{
+                    "type":"string",
+                    "format":"binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    },
+                    "file":{
+                      "type":"object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/users/removeimage":{
+      "put":{
+        "summary":"Remove imagem de perfil do usuário",
+        "description":"Essa rota é responsável pela remoção da imagem de perfil do usuário",
+        "tags":["Users"],
+        "security": [{"bearerAuth": []}],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+  },
+  "components":{
+    "schemas":{
+      "RegisterUser": {
+        "type":"object",
+        "properties":{
+          "user_name": {
+            "type": "string"
+          },
+          "user_lastname": {
+            "type": "string"
+          },
+          "user_email": {
+            "type": "string",
+            "format":"email"
+          },
+          "user_password": {
+            "type": "string"
+          },
+          "confirmpassword": {
+            "type": "string"
+          },
+          "user_birthdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "user_sex": {
+            "type": "string",
+            "enum": ["male","female","other"]
+          },
+          "user_education": {
+            "type": "style",
+            "enum": ["elementary_1","elementary_2","highschool"]
+          }
+
+        }
+      },
+      "ReturnUser": {
+        "type":"object",
+        "properties":{
+          "user_id":{
+            "type":"integer"
+          },
+          "user_image_path":{
+            "type":"string"
+          },
+          "user_name": {
+            "type": "string"
+          },
+          "user_lastname": {
+            "type": "string"
+          },
+          "user_email": {
+            "type": "string",
+            "format":"email"
+          },
+          "user_birthdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "user_sex": {
+            "type": "string",
+            "enum": ["male","female","other"]
+          },
+          "user_education": {
+            "type": "style",
+            "enum": ["elementary_1","elementary_2","highschool"]
+          },
+          "user_permission":{
+            "type": "style",
+            "enum": ["user","staff","adm"]
+          }
+
+        }
+      }
+    },
+    "securitySchemes":{
+      "bearerAuth":{
+        "type":"http",
+        "scheme":"bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
