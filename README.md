@@ -12,9 +12,9 @@ Para iniciar este projeto, você precisa ter o Docker instalado em sua máquina.
 2. Navegue até a pasta do projeto.
 3. Execute o seguinte comando para iniciar o projeto:
 
-\`\`\`bash
+```bash
 docker-compose up
-\`\`\`
+```
 
 Após executar esses passos, o projeto deve estar rodando em sua máquina local.
 
