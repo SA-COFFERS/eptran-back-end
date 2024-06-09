@@ -18,6 +18,10 @@ docker-compose up
 
 Após executar esses passos, o projeto deve estar rodando em sua máquina local.
 
+## Acessando o PhpMyAdmin
+
+O PhpMyAdmin está configurado para rodar na porta 8080. Você pode acessá-lo navegando para `http://localhost:8080` em seu navegador web.
+
 ## Documentação
 
 A documentação para este projeto está disponível no Swagger. Você pode acessá-la navegando para `http://localhost:5000/documentation` em seu navegador web.
