@@ -5,6 +5,7 @@ const userController = require('./controller/userController');
 
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');
+const upload = require('./config/multer');
 
 const routes = express.Router();
 
@@ -15,6 +16,8 @@ routes.post('/users/register', userController.create);
 routes.post('/users/login', userController.login);
 routes.put('/users/update', loginRequired, userController.update);
 routes.delete('/users/delete', loginRequired, userController.delete);
+routes.put('/users/upload', loginRequired, upload.single('file'), userController.upload);
+routes.put('/users/removeimage', loginRequired, userController.removeimage);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {

@@ -1,6 +1,7 @@
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const User = require('../models/User');
 
 // Get all users
@@ -186,5 +187,49 @@ exports.delete = async (req, res) => {
     return res.json({ deletedUser });
   } catch (error) {
     return res.status(500).json({ msg: 'Erro do servidor!' });
+  }
+};
+
+// UPLOAD IMAGE
+
+exports.upload = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId);
+    if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
+
+    const { file } = req;
+    if (!file) {
+      return res
+        .status(400)
+        .json({ msg: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+
+    await user.update({ user_image_path: file.path });
+
+    return res.json({ msg: 'Imagem de perfil do usuário atualizada com sucesso', file });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao salvar a imagem.' });
+  }
+};
+
+exports.removeimage = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId);
+    if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
+
+    const deleteFile = (filePath) => {
+      // eslint-disable-next-line consistent-return
+      fs.unlink(filePath, (error) => {
+        if (error) return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
+      });
+    };
+
+    deleteFile(user.user_image_path);
+
+    await user.update({ user_image_path: null });
+
+    return res.json({ msg: 'Imagem de perfil do usuário removida com sucesso' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
   }
 };
