@@ -17,4 +17,6 @@ app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/uploads', express.static('uploads'));
 app.use(routes);
 
-app.listen(process.env.PORT, process.env.HOST);
+app.listen(process.env.PORT, process.env.HOST, () => {
+  console.log(`Server running on http://localhost:${process.env.PORT}`);
+});
