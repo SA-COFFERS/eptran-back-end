@@ -9,9 +9,12 @@ const loginRequired = require('./middlewares/loginRequired');
 const routes = express.Router();
 
 // User
-routes.get('/users', userController.index);
-routes.post('/user/register', userController.create);
-routes.post('/user/login', userController.login);
+routes.get('/users/index', userController.index);
+routes.get('/users/id/:id', userController.show);
+routes.post('/users/register', userController.create);
+routes.post('/users/login', userController.login);
+routes.put('/users/update', loginRequired, userController.update);
+routes.delete('/users/delete', loginRequired, userController.delete);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {

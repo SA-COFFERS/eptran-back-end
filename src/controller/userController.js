@@ -3,6 +3,27 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// Get all users
+exports.index = async (req, res) => {
+  const users = await User.findAll({ attributes: { exclude: ['user_password'] } });
+  try {
+    return res.json({ users });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
+  }
+};
+
+// Get user by id
+exports.show = async (req, res) => {
+  const user = await User.findOne({ where: { user_id: req.params.id }, attributes: { exclude: ['user_password'] } });
+  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
+  try {
+    return res.json({ user });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
+  }
+};
+
 // Register user
 exports.create = async (req, res) => {
   const {
@@ -75,7 +96,6 @@ exports.login = async (req, res) => {
   try {
     const { user_id, user_permission } = user;
     const secret = process.env.TOKEN_SECRET;
-    const expiration = process.env.TOKEN_EXPIRATION;
     // Generate token
     const token = jwt.sign(
       {
@@ -85,7 +105,7 @@ exports.login = async (req, res) => {
       },
       secret,
       {
-        expiresIn: expiration,
+        expiresIn: 3600,
       },
     );
     user.user_password = undefined;
@@ -95,11 +115,76 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.index = async (req, res) => {
-  const users = await User.findAll({ attributes: { exclude: ['user_password'] } });
+exports.update = async (req, res) => {
+  const user = await User.findByPk(req.userId); // Find user based on id got by token
+  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado.' });
+
+  const {
+    user_name,
+    user_lastname,
+    user_email,
+    user_password,
+    confirmpassword,
+    user_birthdate,
+    user_sex,
+    user_education,
+  } = req.body; // Get variables from requisition body
+
+  if (user_email) {
+    const isEmail = validator.isEmail(user_email); // Validate if email is valid
+    if (!isEmail) return res.status(400).json({ msg: 'Email inválido.' });
+
+    const emailExists = await User.findOne({ where: { user_email } }); // Validate if email exists
+    if (emailExists) return res.status(400).json({ msg: 'Esse email já é utilizado por outro usuário.' });
+  }
+
+  let passwordHash; // hash password if exists
+  if (user_password) {
+    if (user_password.length < 4 || user_password.length > 30) {
+      return res.status(400).json({ msg: 'As senhas devem ter entre 8 e 30 caracteres!' });
+    }
+
+    if (user_password !== confirmpassword) return res.status(400).json({ msg: 'As senhas estão diferentes!' });
+
+    passwordHash = await bcryptjs.hash(user_password, 8);
+  }
+
   try {
-    return res.json({ users });
+    const updateFields = {}; // creating a variable to ensure that any field is uptaded incorrectly
+
+    // validating each field and adding on the object that will be updated
+    if (user_name) updateFields.user_name = user_name;
+    if (user_lastname) updateFields.user_lastname = user_lastname;
+    if (user_email) updateFields.user_email = user_email;
+    if (user_password) updateFields.user_password = passwordHash;
+    if (user_birthdate) updateFields.user_birthdate = user_birthdate;
+    if (user_sex) updateFields.user_sex = user_sex;
+    if (user_education) updateFields.user_education = user_education;
+
+    const updatedUser = await user.update(updateFields);
+
+    return res.json(updatedUser);
   } catch (error) {
-    return res.status(500).json({ msg: 'Erro do Servidor.' });
+    return res.status(500).json({ msg: 'Erro ao atualizar o usuário.' });
+  }
+};
+
+exports.delete = async (req, res) => {
+  const user = await User.findByPk(req.userId); // Find user based on id got by token
+  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado.' });
+
+  // Validate password
+  const { password } = req.body;
+  if (!password || !req.body) return res.status(400).json({ msg: 'Insira sua senha.' });
+
+  const passwordIsValid = await bcryptjs.compare(password, user.user_password);
+
+  if (!passwordIsValid) return res.status(422).json({ msg: 'Senha incorreta!' });
+
+  try {
+    const deletedUser = await user.destroy();
+    return res.json({ deletedUser });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do servidor!' });
   }
 };
