@@ -25,6 +25,11 @@ class User extends Model {
       tableName: 'user',
     });
   }
+
+  static associate(models) {
+    this.hasMany(models.SavedNews, { foreignKey: 'saved_news_fk_user' });
+    this.hasMany(models.News, { foreignKey: 'news_fk_user' });
+  }
 }
 
 module.exports = User;
