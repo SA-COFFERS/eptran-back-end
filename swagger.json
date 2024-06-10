@@ -577,6 +577,257 @@
         }
 
       }
+    },
+    "/news/add":{
+      "post":{
+        "summary":"Adicionar notícia",
+        "description":"Essa rota é responsável por adicionar novas notícias",
+        "tags":["News"],
+        "security": [{"bearerAuth": []}],
+        "requestBody":{
+          "content":{
+            "multipart/form-data":{
+              "schema":{
+                "$ref":"#/components/schemas/AddNews"
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnNews"
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/news/index":{
+      "get":{
+        "summary":"Listar notícias.",
+        "description":"Essa é a rota responsável por buscar e listar todas as notícias.",
+        "tags":["News"],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "array",
+                "items":{
+                  "$ref": "#/components/schemas/ReturnNews"
+                }
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/news/id/{id}":{
+      "get":{
+        "summary":"Buscar notícia por ID",
+        "description":"Essa é a rota responsável por buscar uma notícia pelo seu ID",
+        "tags":["News"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID da notícia",
+          "required": true
+        }
+        ],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "object",
+                "$ref": "#/components/schemas/ReturnNews"
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/news/userid/{id}":{
+      "get":{
+        "summary":"Listar notícias escritas por um usuário.",
+        "description":"Essa é a rota responsável por buscar e listar todas as notícias escritas pelo usuário em que o ID foi fornecido.",
+        "tags":["News"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do usuário",
+          "required": true
+        }
+        ],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "array",
+                "items":{
+                  "$ref": "#/components/schemas/ReturnNews"
+                }
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
     }
   },
   "components":{
@@ -651,6 +902,79 @@
             "enum": ["user","staff","adm"]
           }
 
+        }
+      },
+      "AddNews":{
+        "type":"object",
+        "properties":{
+          "news_title":{
+            "type":"string"
+          },
+          "news_subtitle":{
+            "type":"string"
+          },
+          "news_first_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_second_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_third_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_fourth_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_fifth_paragraph":{
+            "type":"string"
+          },
+          "file":{
+            "type":"string",
+            "format":"binary"
+          }
+        }
+      },
+      "ReturnNews":{
+        "type":"object",
+        "properties":{
+          "news_id":{
+            "type":"integer"
+          },
+          "news_title":{
+            "type":"string"
+          },
+          "news_subtitle":{
+            "type":"string"
+          },
+          "news_first_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_second_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_third_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_fourth_paragraph":{
+            "type":"string"
+          }
+          ,
+          "news_fifth_paragraph":{
+            "type":"string"
+          },
+          "news_image_path":{
+            "type":"string"
+          },
+          "news_fk_user":{
+            "type":"integer"
+          }
         }
       }
     },

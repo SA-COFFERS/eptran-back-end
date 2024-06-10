@@ -4,6 +4,7 @@ const User = require('../models/User');
 
 exports.index = async (req, res) => {
   const news = await News.findAll();
+  if (news.length === 0) return res.status(404).json({ msg: 'Nenhuma notícia encontrada.' });
 
   try {
     return res.json({ news });
