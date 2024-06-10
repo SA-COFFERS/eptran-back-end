@@ -16,7 +16,7 @@ exports.index = async (req, res) => {
 
 // Get user by id
 exports.show = async (req, res) => {
-  const user = await User.findOne({ where: { user_id: req.params.id }, attributes: { exclude: ['user_password'] } });
+  const user = await User.findByPk(req.params.id);
   if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
   try {
     return res.json({ user });
@@ -182,6 +182,16 @@ exports.delete = async (req, res) => {
 
   if (!passwordIsValid) return res.status(422).json({ msg: 'Senha incorreta!' });
 
+  // fuction to remove image from uploads before deleting the user.
+  const deleteFile = (filePath) => {
+    // eslint-disable-next-line consistent-return
+    fs.unlink(filePath, (error) => {
+      if (error) return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
+    });
+  };
+
+  deleteFile(user.user_image_path); // call the delete fuction and give the path to delete them
+
   try {
     const deletedUser = await user.destroy();
     return res.json({ deletedUser });
@@ -199,6 +209,21 @@ exports.upload = async (req, res) => {
 
     const { file } = req;
     if (!file) return res.status(400).json({ msg: 'Nenhum arquivo de imagem foi enviado.' }); // verify if a file was sent
+
+    // if user already has a image, it will be deleted before setting the new path
+    if (user.user_image_path !== null) {
+      const deleteFile = (filePath) => {
+        // eslint-disable-next-line consistent-return
+        fs.unlink(filePath, (error) => {
+          if (error) {
+            // eslint-disable-next-line no-useless-return
+            return;
+          }
+        });
+      };
+
+      deleteFile(user.user_image_path); // call the delete fuction and give the path to delete them
+    }
 
     await user.update({ user_image_path: file.path }); // add the image path to the user
 

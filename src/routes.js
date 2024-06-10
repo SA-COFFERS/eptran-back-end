@@ -24,6 +24,11 @@ routes.put('/users/removeimage', loginRequired, userController.removeimage);
 
 // News
 routes.post('/news/add', isStaff, upload.single('file'), newsController.create);
+routes.get('/news/index', newsController.index);
+routes.get('/news/id/:id', newsController.show);
+routes.get('/news/userid/:id', newsController.getByUserId);
+routes.put('/news/update/:id', isStaff, upload.single('file'), newsController.update);
+routes.delete('/news/delete/:id', isStaff, newsController.delete);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {
