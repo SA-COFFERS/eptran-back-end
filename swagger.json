@@ -828,6 +828,198 @@
       }
         }
       }
+    },
+    "/news/update/{id}":{
+      "put":{
+        "summary":"Atualizar notícia",
+        "description":"Essa rota é responsável por atualizar uma notícia (O que não deseja atualizar, deixe em branco)",
+        "tags":["News"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do usuário",
+          "required": true
+        }
+        ],
+        "security": [{"bearerAuth": []}],
+        "requestBody":{
+          "content":{
+            "multipart/form-data":{
+              "schema":{
+                "$ref":"#/components/schemas/AddNews"
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnNews"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/news/delete/{id}":{
+      "delete":{
+        "summary":"Apagar notícia",
+        "description":"Essa é a rota responsável por apagar uma notícia",
+        "tags":["News"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID da notícia",
+          "required": true
+        }
+        ],
+        "security": [{"bearerAuth": []}],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnNews"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components":{
