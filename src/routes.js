@@ -3,6 +3,7 @@ const express = require('express');
 // Controllers
 const userController = require('./controllers/userController');
 const newsController = require('./controllers/newsController');
+const savedNewsController = require('./controllers/savedNewsControler');
 
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');
@@ -29,6 +30,12 @@ routes.get('/news/id/:id', newsController.show);
 routes.get('/news/userid/:id', newsController.getByUserId);
 routes.put('/news/update/:id', isStaff, upload.single('file'), newsController.update);
 routes.delete('/news/delete/:id', isStaff, newsController.delete);
+
+// SavedNews
+
+routes.post('/savednews/save', loginRequired, savedNewsController.save);
+routes.get('/savednews/index', loginRequired, savedNewsController.index);
+routes.delete('/savednews/delete', loginRequired, savedNewsController.delete);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {
