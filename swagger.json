@@ -1020,6 +1020,259 @@
           }
         }
       }
+    },
+    "/savednews/save/{newsId}":{
+      "post":{
+        "summary":"Salvar uma notícia",
+        "description":"Essa rota é a responsável por salvar notícias",
+        "tags":["Saved News"],
+        "security": [{"bearerAuth": []}],
+        "parameters":[
+          {
+          "name":"newsId",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID da notícia",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnSavedNews"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+    ,
+    "/savednews/delete/{newsId}":{
+      "delete":{
+        "summary":"Cancelar salvamento de uma notícia",
+        "description":"Essa rota é a responsável por cancelar o salvamento das notícias",
+        "tags":["Saved News"],
+        "security": [{"bearerAuth": []}],
+        "parameters":[
+          {
+          "name":"newsId",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID da notícia",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnSavedNews"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/savednews/index":{
+      "get":{
+        "summary":"Listar notícias salvas..",
+        "description":"Essa é a rota responsável listar as notícias salvas pelo usuário.",
+        "tags":["Saved News"],
+        "security": [{"bearerAuth": []}],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "array",
+                "items":{
+                  "$ref": "#/components/schemas/ReturnSavedNews"
+                }
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
     }
   },
   "components":{
@@ -1168,7 +1421,22 @@
             "type":"integer"
           }
         }
+      },
+      "ReturnSavedNews":{
+        "type":"object",
+        "properties":{
+          "saved_news_id":{
+            "type":"integer"
+          },
+          "saved_news_fk_user":{
+            "type":"integer"
+          },
+          "saved_news_fk_news":{
+            "type":"integer"
+          }
+        }
       }
+
     },
     "securitySchemes":{
       "bearerAuth":{

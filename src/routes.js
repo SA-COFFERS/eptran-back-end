@@ -34,7 +34,7 @@ routes.delete('/news/delete/:id', isStaff, newsController.delete);
 // SavedNews
 routes.post('/savednews/save/:newsId', loginRequired, savedNewsController.save);
 routes.get('/savednews/index', loginRequired, savedNewsController.index);
-routes.delete('/savednews/delete', loginRequired, savedNewsController.delete);
+routes.delete('/savednews/delete/:newsId', loginRequired, savedNewsController.delete);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {
