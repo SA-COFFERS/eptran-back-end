@@ -32,7 +32,7 @@ routes.put('/news/update/:id', isStaff, upload.single('file'), newsController.up
 routes.delete('/news/delete/:id', isStaff, newsController.delete);
 
 // SavedNews
-routes.post('/savednews/save', loginRequired, savedNewsController.save);
+routes.post('/savednews/save/:newsId', loginRequired, savedNewsController.save);
 routes.get('/savednews/index', loginRequired, savedNewsController.index);
 routes.delete('/savednews/delete', loginRequired, savedNewsController.delete);
 
