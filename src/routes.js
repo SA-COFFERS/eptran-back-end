@@ -3,7 +3,7 @@ const express = require('express');
 // Controllers
 const userController = require('./controllers/userController');
 const newsController = require('./controllers/newsController');
-const savedNewsController = require('./controllers/savedNewsControler');
+const savedNewsController = require('./controllers/savedNewsController');
 
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');

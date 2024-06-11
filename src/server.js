@@ -19,5 +19,5 @@ app.use(routes);
 
 app.listen(process.env.PORT, process.env.HOST, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);
-  console.log('PhpMyAdmin running on http://localhost:8080');
+  console.log('PhpMyAdmin running on http://localhost:8081');
 });
