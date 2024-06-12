@@ -28,7 +28,11 @@ docker exec -it eptran-back-end-app-1 npx sequelize-cli db:migrate
 
 ## Acessando o PhpMyAdmin
 
-O PhpMyAdmin está configurado para rodar na porta 8080. Você pode acessá-lo navegando para `http://localhost:8081` em seu navegador web.
+O PhpMyAdmin está configurado para rodar na porta 8081. Você pode acessá-lo navegando para `http://localhost:8081` em seu navegador web.
+
+Quando solicitado, informe que o host é `mysqldb`, o usuário padrão é `root` e a senha padrão também é `root`.
+
+As configurações podem variar dependendo do seu ambiente Docker e das configurações específicas do projeto.
 
 ## Documentação
 
