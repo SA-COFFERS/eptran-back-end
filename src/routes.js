@@ -4,6 +4,7 @@ const express = require('express');
 const userController = require('./controllers/userController');
 const newsController = require('./controllers/newsController');
 const savedNewsController = require('./controllers/savedNewsController');
+const gameController = require('./controllers/gameController');
 
 // Middlewares
 const loginRequired = require('./middlewares/loginRequired');
@@ -35,6 +36,12 @@ routes.delete('/news/delete/:id', isStaff, newsController.delete);
 routes.post('/savednews/save/:newsId', loginRequired, savedNewsController.save);
 routes.get('/savednews/index', loginRequired, savedNewsController.index);
 routes.delete('/savednews/delete/:newsId', loginRequired, savedNewsController.delete);
+
+// Game
+routes.post('/games/add', isAdmin, gameController.create);
+routes.get('/games/index', gameController.index);
+routes.get('/games/classification/:classification', gameController.getByClassification);
+routes.put('/games/update', isAdmin, gameController.update); // FALTA TESTAR
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {

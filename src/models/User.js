@@ -29,7 +29,7 @@ class User extends Model {
   static associate(models) {
     this.hasMany(models.SavedNews, { foreignKey: 'saved_news_fk_user' });
     this.hasMany(models.News, { foreignKey: 'news_fk_user' });
-    this.hasMany(models.GameSatistics, { foreignKey: 'game_statistics_fk_user' });
+    this.hasMany(models.GameStatistics, { foreignKey: 'game_statistics_fk_user' });
   }
 }
 

@@ -5,8 +5,10 @@ const dbConfig = require('../config/database');
 const User = require('../models/User');
 const News = require('../models/News');
 const SavedNews = require('../models/SavedNews');
+const Game = require('../models/Game');
+const GameStatistics = require('../models/GameStatistics');
 
-const models = [User, News, SavedNews];
+const models = [User, News, SavedNews, Game, GameStatistics];
 
 const connection = new Sequelize(dbConfig);
 

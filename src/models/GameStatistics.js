@@ -11,7 +11,7 @@ class GameStatistics extends Model {
         autoIncrement: true,
       },
       game_statistics_time_spent: DataTypes.TIME,
-      game_statistics_progress: DataTypes.INT,
+      game_statistics_progress: DataTypes.INTEGER,
       game_statistics_fatest_time: DataTypes.TIME,
     }, {
       sequelize,
