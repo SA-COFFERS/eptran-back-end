@@ -41,7 +41,8 @@ routes.delete('/savednews/delete/:newsId', loginRequired, savedNewsController.de
 routes.post('/games/add', isAdmin, gameController.create);
 routes.get('/games/index', gameController.index);
 routes.get('/games/classification/:classification', gameController.getByClassification);
-routes.put('/games/update', isAdmin, gameController.update); // FALTA TESTAR
+routes.put('/games/update/:id', isAdmin, gameController.update);
+routes.delete('/games/delete/:id', isAdmin, gameController.delete);
 
 // CheckToken
 routes.get('/checktoken', loginRequired, async (req, res) => {

@@ -73,3 +73,15 @@ exports.update = async (req, res) => {
     return res.status(500).json({ msg: 'Erro ao atualizar jogo.' });
   }
 };
+
+exports.delete = async (req, res) => {
+  const game = await Game.findByPk(req.params.id);
+  if (!game) return res.status(404).json({ msg: 'Jogo não encontrado.' });
+
+  try {
+    const deletedNews = await game.destroy();
+    return res.json(deletedNews);
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao deletar jogo' });
+  }
+};
