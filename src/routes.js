@@ -40,6 +40,7 @@ routes.delete('/savednews/delete/:newsId', loginRequired, savedNewsController.de
 // Game
 routes.post('/games/add', isAdmin, gameController.create);
 routes.get('/games/index', gameController.index);
+routes.get('/games/id/:id', gameController.show);
 routes.get('/games/classification/:classification', gameController.getByClassification);
 routes.put('/games/update/:id', isAdmin, gameController.update);
 routes.delete('/games/delete/:id', isAdmin, gameController.delete);

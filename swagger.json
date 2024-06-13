@@ -266,7 +266,7 @@
     "/users/update":{
       "put":{
         "summary":"Atualização de usuário",
-        "description":"Essa é a rota responsável por atualizar as informações do usuário.",
+        "description":"Essa é a rota responsável por atualizar as informações do usuário (O que não deseja atualizar, deixe em branco).",
         "tags":["Users"],
         "security": [{"bearerAuth": []}],
         "requestBody": {
@@ -1208,7 +1208,7 @@
     },
     "/savednews/index":{
       "get":{
-        "summary":"Listar notícias salvas..",
+        "summary":"Listar notícias salvas.",
         "description":"Essa é a rota responsável listar as notícias salvas pelo usuário.",
         "tags":["Saved News"],
         "security": [{"bearerAuth": []}],
@@ -1252,6 +1252,372 @@
                 "items":{
                   "$ref": "#/components/schemas/ReturnSavedNews"
                 }
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/games/add":{
+      "post":{
+        "summary":"Adicionar jogo",
+        "description":"Essa rota é responsável por adicionar novos jogos",
+        "tags":["Games"],
+        "security": [{"bearerAuth": []}],
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "properties":{
+                  "game_name": "string",
+                  "game_description": "string",
+                  "game_classification": {
+                    "type":"string",
+                    "enum": ["elementary_1","elementary_2","highschool"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnGame"
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/games/index":{
+      "get":{
+        "summary":"Listar todos os jogos",
+        "description":"Essa é a rota responsável por listar os jogos.",
+        "tags":["Games"],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "array",
+                "items":{
+                  "$ref": "#/components/schemas/ReturnGame"
+                }
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/games/id/{id}":{
+      "get":{
+        "summary":"Listar jogo pelo ID",
+        "description":"Essa é a rota responsável por listar um jogo pelo ID.",
+        "tags":["Games"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do jogo",
+          "required": true
+        }
+        ],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/ReturnGame"
+              }
+          }
+        }
+      },
+      "404":{
+        "description":"Not Found",
+        "content": {
+          "application/json":{
+            "schema":{
+              "type":"object",
+              "properties":{
+                "msg":{
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/games/update/{id}":{
+      "put":{
+        "summary":"Atualizar jogo",
+        "description":"Essa rota é responsável por atualizar um jogo (O que não deseja atualizar, deixe em branco)",
+        "tags":["Games"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do jogo",
+          "required": true
+        }
+        ],
+        "security": [{"bearerAuth": []}],
+        "requestBody":{
+          "content":{
+            "multipart/form-data":{
+              "schema":{
+                "properties":{
+                  "game_name":{
+                    "type":"string"
+                  },
+                  "game_description":{
+                    "type":"string"
+                  },
+                  "game_classification":{
+                    "type":"string",
+                    "enum":["elementary_1","elementary_2","highschool"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/ReturnGame"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not Found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/games/delete/{id}":{
+      "delete":{
+        "summary":"Listar jogo pelo ID",
+        "description":"Essa é a rota responsável por listar um jogo pelo ID.",
+        "tags":["Games"],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do jogo",
+          "required": true
+        }
+        ],
+        "responses":{
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/ReturnGame"
               }
           }
         }
@@ -1434,6 +1800,20 @@
           "saved_news_fk_news":{
             "type":"integer"
           }
+        }
+      },
+      "ReturnGame":{
+        "type":"object",
+          "properties":{
+            "game_id":{
+              "type":"integer"
+            },
+            "game_name": "string",
+            "game_description": "string",
+            "game_classification": {
+              "type":"string",
+              "enum": ["elementary_1","elementary_2","highschool"]
+            }
         }
       }
 

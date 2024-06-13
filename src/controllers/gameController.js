@@ -12,6 +12,18 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.show = async (req, res) => {
+  const game = await Game.findByPk(req.params.id);
+
+  if (!game) return res.status(404).json({ msg: 'Nenhum jogo encontrado.' });
+
+  try {
+    return res.json({ game });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao buscar jogo.' });
+  }
+};
+
 exports.getByClassification = async (req, res) => {
   // eslint-disable-next-line max-len
   const games = await Game.findAll({ where: { game_classification: req.params.classification } });
