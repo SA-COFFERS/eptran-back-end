@@ -1585,6 +1585,7 @@
         "summary":"Listar jogo pelo ID",
         "description":"Essa é a rota responsável por listar um jogo pelo ID.",
         "tags":["Games"],
+        "security": [{"bearerAuth": []}],
         "parameters":[
           {
           "name":"id",
