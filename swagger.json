@@ -185,6 +185,21 @@
               }
             }
           },
+          "404":{
+            "description": "Not found",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "200":{
             "description":"OK",
             "content":{

@@ -4,27 +4,6 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const User = require('../models/User');
 
-// Get all users
-exports.index = async (req, res) => {
-  const users = await User.findAll({ attributes: { exclude: ['user_password'] } });
-  try {
-    return res.json({ users });
-  } catch (error) {
-    return res.status(500).json({ msg: 'Erro do Servidor.' });
-  }
-};
-
-// Get user by id
-exports.show = async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
-  try {
-    return res.json({ user });
-  } catch (error) {
-    return res.status(500).json({ msg: 'Erro do Servidor.' });
-  }
-};
-
 // Register user
 exports.create = async (req, res) => {
   const {
@@ -186,7 +165,10 @@ exports.delete = async (req, res) => {
   const deleteFile = (filePath) => {
     // eslint-disable-next-line consistent-return
     fs.unlink(filePath, (error) => {
-      if (error) return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
+      if (error) {
+        // eslint-disable-next-line no-useless-return
+        return;
+      }
     });
   };
 
@@ -242,7 +224,10 @@ exports.removeimage = async (req, res) => {
     const deleteFile = (filePath) => {
       // eslint-disable-next-line consistent-return
       fs.unlink(filePath, (error) => {
-        if (error) return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
+        if (error) {
+          // eslint-disable-next-line no-useless-return
+          return;
+        }
       });
     };
 
@@ -253,5 +238,197 @@ exports.removeimage = async (req, res) => {
     return res.json({ msg: 'Imagem de perfil do usuário removida com sucesso' });
   } catch (error) {
     return res.status(500).json({ msg: 'Erro ao excluir a imagem.' });
+  }
+};
+
+// ADM ROUTES
+
+// Get all users
+exports.index = async (req, res) => {
+  const users = await User.findAll({ attributes: { exclude: ['user_password'] } });
+  if (users.length === 0) return res.status(404).json({ msg: 'Nenhum usuário encontrado' });
+
+  try {
+    return res.json({ users });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
+  }
+};
+
+// Get user by id
+exports.show = async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado' });
+  try {
+    return res.json({ user });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do Servidor.' });
+  }
+};
+
+exports.createStaff = async (req, res) => {
+  const {
+    user_name,
+    user_lastname,
+    user_email,
+    user_password,
+    confirmpassword,
+    user_birthdate,
+    user_sex,
+  } = req.body;
+
+  // eslint-disable-next-line max-len
+  if (!user_name || !user_email || !user_password || !confirmpassword || !user_lastname || !user_birthdate || !user_sex) {
+    return res.status(400).json({ msg: 'Preencha todos os campos.' });
+  }
+
+  if (user_password !== confirmpassword) {
+    return res.status(400).json({ msg: 'As senhas estão diferentes.' });
+  }
+
+  // Validate if email is valid
+  if (!validator.isEmail(user_email)) {
+    return res.status(400).json({ msg: 'Insira um email válido.' });
+  }
+
+  // Validate if the email was already used
+  if (await User.findOne({ where: { user_email } })) {
+    return res.status(400).json({ msg: 'Esse email já foi cadastrado' });
+  }
+
+  if (user_password.length < 8 || user_password.length > 30) {
+    return res.status(400).json({ msg: 'A senha deve possuir entre 8 e 30 caracteres' });
+  }
+
+  const passwordHash = await bcryptjs.hash(user_password, 8);
+
+  try {
+    const newStaff = await User.create({
+      user_name,
+      user_lastname,
+      user_email,
+      user_password: passwordHash,
+      user_birthdate,
+      user_sex,
+      user_education: 'highschool',
+      user_permission: 'staff',
+    });
+
+    newStaff.user_password = undefined;
+    return res.json({ newStaff });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao criar staff.' });
+  }
+};
+
+exports.createAdmin = async (req, res) => {
+  const {
+    user_name,
+    user_lastname,
+    user_email,
+    user_password,
+    confirmpassword,
+    user_birthdate,
+    user_sex,
+  } = req.body;
+
+  // eslint-disable-next-line max-len
+  if (!user_name || !user_email || !user_password || !confirmpassword || !user_lastname || !user_birthdate || !user_sex) {
+    return res.status(400).json({ msg: 'Preencha todos os campos.' });
+  }
+
+  if (user_password !== confirmpassword) {
+    return res.status(400).json({ msg: 'As senhas estão diferentes.' });
+  }
+
+  // Validate if email is valid
+  if (!validator.isEmail(user_email)) {
+    return res.status(400).json({ msg: 'Insira um email válido.' });
+  }
+
+  // Validate if the email was already used
+  if (await User.findOne({ where: { user_email } })) {
+    return res.status(400).json({ msg: 'Esse email já foi cadastrado' });
+  }
+
+  if (user_password.length < 8 || user_password.length > 30) {
+    return res.status(400).json({ msg: 'A senha deve possuir entre 8 e 30 caracteres' });
+  }
+
+  const passwordHash = await bcryptjs.hash(user_password, 8);
+
+  try {
+    const newAdmin = await User.create({
+      user_name,
+      user_lastname,
+      user_email,
+      user_password: passwordHash,
+      user_birthdate,
+      user_sex,
+      user_education: 'highschool',
+      user_permission: 'adm',
+    });
+
+    newAdmin.user_password = undefined;
+    return res.json({ newAdmin });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao criar staff.' });
+  }
+};
+
+exports.deleteWithAdm = async (req, res) => {
+  const user = await User.findByPk(req.params.id); // Find user based on id got by token
+  if (!user) return res.status(404).json({ msg: 'Usuário não encontrado.' });
+
+  // Validate password
+  const { password } = req.body;
+  if (!password || !req.body) return res.status(400).json({ msg: 'Insira sua senha.' });
+
+  const passwordIsValid = await bcryptjs.compare(password, user.user_password);
+
+  if (!passwordIsValid) return res.status(422).json({ msg: 'Senha incorreta!' });
+
+  // fuction to remove image from uploads before deleting the user.
+  const deleteFile = (filePath) => {
+    // eslint-disable-next-line consistent-return
+    fs.unlink(filePath, (error) => {
+      if (error) {
+        // eslint-disable-next-line no-useless-return
+        return;
+      }
+    });
+  };
+
+  deleteFile(user.user_image_path); // call the delete fuction and give the path to delete them
+
+  try {
+    const deletedUser = await user.destroy();
+    return res.json({ deletedUser });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro do servidor!' });
+  }
+};
+
+exports.getByEducation = async (req, res) => {
+  const users = await User.findAll({ where: { user_education: req.params.education, user_permission: 'user' } });
+
+  if (users.length === 0) return res.status(404).json({ msg: 'Nenhum usuário encontrada' });
+
+  try {
+    return res.json({ users });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao encontrar usuários.' });
+  }
+};
+
+exports.getByPermission = async (req, res) => {
+  const users = await User.findAll({ where: { user_permission: req.params.permission } });
+
+  if (users.length === 0) return res.status(404).json({ msg: 'Nenhum usuário encontrada' });
+
+  try {
+    return res.json({ users });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao encontrar usuários.' });
   }
 };
