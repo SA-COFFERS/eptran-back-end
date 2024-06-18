@@ -15,13 +15,13 @@ const upload = require('./config/multer');
 const routes = express.Router();
 
 // User
-routes.get('/users/index', isAdmin, userController.index);
-routes.get('/users/id/:id', isAdmin, userController.show);
-routes.get('/users/education/:education', isAdmin, userController.getByEducation);
-routes.get('/users/permission/:permission', isAdmin, userController.getByPermission);
-routes.post('/users/register/staff', isAdmin, userController.createStaff);
-routes.post('/users/register/admin', isAdmin, userController.createAdmin);
-routes.delete('/users/delete/:id', isAdmin, userController.deleteWithAdm);
+routes.get('/users/adm/index', isAdmin, userController.index);
+routes.get('/users/adm/id/:id', isAdmin, userController.show);
+routes.get('/users/adm/education/:education', isAdmin, userController.getByEducation);
+routes.get('/users/adm/permission/:permission', isAdmin, userController.getByPermission);
+routes.post('/users/adm/register/staff', isAdmin, userController.createStaff);
+routes.post('/users/adm/register/admin', isAdmin, userController.createAdmin);
+routes.delete('/users/adm/delete/:id', isAdmin, userController.deleteWithAdm);
 routes.post('/users/register', userController.create);
 routes.post('/users/login', userController.login);
 routes.put('/users/update', loginRequired, userController.update);
