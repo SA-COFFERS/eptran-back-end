@@ -372,7 +372,7 @@ exports.createAdmin = async (req, res) => {
     newAdmin.user_password = undefined;
     return res.json({ newAdmin });
   } catch (error) {
-    return res.status(500).json({ msg: 'Erro ao criar staff.' });
+    return res.status(500).json({ msg: 'Erro ao criar Adm.' });
   }
 };
 
