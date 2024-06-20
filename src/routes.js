@@ -16,9 +16,10 @@ const routes = express.Router();
 
 // User
 routes.get('/users/adm/index', isAdmin, userController.index);
-routes.get('/users/adm/id/:id', isAdmin, userController.show);
+routes.get('/users/adm/find/:id', isAdmin, userController.show);
 routes.get('/users/adm/education/:education', isAdmin, userController.getByEducation);
 routes.get('/users/adm/permission/:permission', isAdmin, userController.getByPermission);
+routes.get('/users/adm/sex/:sex', isAdmin, userController.getBySex);
 routes.post('/users/adm/register/staff', isAdmin, userController.createStaff);
 routes.post('/users/adm/register/admin', isAdmin, userController.createAdmin);
 routes.delete('/users/adm/delete/:id', isAdmin, userController.deleteWithAdm);
@@ -56,7 +57,10 @@ routes.get('/checktoken', loginRequired, async (req, res) => {
 });
 
 routes.get('/', async (req, res) => {
-  res.json({ msg: 'hello' });
+  res.json({
+    msg: 'Welcome to Eptran Api',
+    documentation: 'http://localhost:5000/documentation',
+  });
 });
 
 module.exports = routes;

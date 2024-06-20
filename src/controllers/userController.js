@@ -432,3 +432,15 @@ exports.getByPermission = async (req, res) => {
     return res.status(500).json({ msg: 'Erro ao encontrar usuários.' });
   }
 };
+
+exports.getBySex = async (req, res) => {
+  const users = await User.findAll({ where: { user_sex: req.params.sex } });
+
+  if (users.length === 0) return res.status(404).json({ msg: 'Nenhum usuário encontrada' });
+
+  try {
+    return res.json({ users });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Erro ao encontrar usuários.' });
+  }
+};

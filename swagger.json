@@ -75,6 +75,124 @@
         }
       }
     },
+    "/users/adm/register/staff":{
+      "post":{
+        "summary":"Cadastro de Staffs",
+        "description":"Essa é a rota responsável por cadastrar um novo staff",
+        "tags":["Users","Admin"],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "$ref":"#/components/schemas/RegisterUser"
+              }
+            }
+          }
+        },
+        "responses":{
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "type":"object",
+                  "$ref": "#/components/schemas/ReturnUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/adm/register/admin":{
+      "post":{
+        "summary":"Cadastro de usuário",
+        "description":"Essa é a rota responsável por cadastrar um novo usuário",
+        "tags":["Users","Admin"],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "$ref":"#/components/schemas/RegisterStaffOrAdm"
+              }
+            }
+          }
+        },
+        "responses":{
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "type":"object",
+                  "$ref": "#/components/schemas/ReturnStaffOrAdm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/login":{
       "post":{
         "summary":"Login de usuário",
@@ -148,11 +266,11 @@
         }
       }
     },
-    "/users/index":{
+    "/users/adm/index":{
       "get":{
         "summary":"Listar usuários",
         "description":"Essa rota é responsável por listar todos os usuários",
-        "tags":["Users"],
+        "tags":["Users","Admin"],
         "security": [{"bearerAuth": []}],
         "responses":{
           "401":{
@@ -216,12 +334,12 @@
         }
       }
     },
-    "/users/id/{id}":{
+    "/users/adm/find/{id}":{
       "get":{
         "summary":"Buscar usuário por ID",
         "security": [{"bearerAuth": []}],
         "description":"Essa é a rota responsável por buscar um usuário pelo seu ID",
-        "tags":["Users"],
+        "tags":["Users","Admin"],
         "parameters":[
           {
           "name":"id",
@@ -230,6 +348,195 @@
           },
           "in":"path",
           "description":"ID do usuário",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "object",
+                "$ref": "#/components/schemas/ReturnUser"
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/users/adm/permission/{permission}":{
+      "get":{
+        "summary":"Buscar usuário pela permissão",
+        "security": [{"bearerAuth": []}],
+        "description":"Essa é a rota responsável por buscar um usuário pela sua permissão",
+        "tags":["Users","Admin"],
+        "parameters":[
+          {
+          "name":"permission",
+          "schema":{
+            "type":"string",
+            "enum":["adm", "staff", "user"]
+          },
+          "in":"path",
+          "description":"Permissão do usuário",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "object",
+                "$ref": "#/components/schemas/ReturnUser"
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/users/adm/education/{education}":{
+      "get":{
+        "summary":"Buscar usuário pela educação",
+        "security": [{"bearerAuth": []}],
+        "description":"Essa é a rota responsável por buscar um usuário pela sua educação",
+        "tags":["Users","Admin"],
+        "parameters":[
+          {
+          "name":"education",
+          "schema":{
+            "type":"string",
+            "enum":["elementary_1", "elementary_2", "highschool"]
+          },
+          "in":"path",
+          "description":"Permissão do usuário",
+          "required": true
+        }
+        ],
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+            "application/json":{
+              "schema":{
+                "type": "object",
+                "$ref": "#/components/schemas/ReturnUser"
+              }
+          }
+        }
+      }
+        }
+      }
+    },
+    "/users/adm/sex/{sex}":{
+      "get":{
+        "summary":"Buscar usuário pelo sexo",
+        "security": [{"bearerAuth": []}],
+        "description":"Essa é a rota responsável por buscar um usuário pelo seu sexo",
+        "tags":["Users","Admin"],
+        "parameters":[
+          {
+          "name":"sex",
+          "schema":{
+            "type":"string",
+            "enum":["male", "female", "other"]
+          },
+          "in":"path",
+          "description":"Permissão do usuário",
           "required": true
         }
         ],
@@ -372,6 +679,99 @@
         "description":"Essa é a rota responsável por deletar o usuário",
         "tags":["Users"],
         "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content":{
+            "application/json": {
+              "schema":{
+                "properties":{
+                  "password":{
+                    "type":"string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "401":{
+            "description": "Unauthorized",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description": "Bad Request",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "Internal server error",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "msg":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200":{
+            "description":"OK",
+            "content":{
+              "application/json": {
+                "schema":{
+                  "properties":{
+                    "user":{
+                      "$ref":"#/components/schemas/ReturnUser"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/adm/delete/{id}":{
+      "delete":{
+        "summary":"Deletar usuário",
+        "description":"Essa é a rota responsável por deletar um usuário",
+        "tags":["Users","Admin"],
+        "security": [{"bearerAuth": []}],
+        "parameters":[
+          {
+          "name":"id",
+          "schema":{
+            "type":"integer"
+          },
+          "in":"path",
+          "description":"ID do usuário",
+          "required": true
+        }
+        ],
         "requestBody": {
           "content":{
             "application/json": {
@@ -1127,8 +1527,7 @@
         }
 
       }
-    }
-    ,
+    },
     "/savednews/delete/{newsId}":{
       "delete":{
         "summary":"Cancelar salvamento de uma notícia",
@@ -1691,6 +2090,35 @@
             "enum": ["elementary_1","elementary_2","highschool"]
           }
 
+        }
+      },
+      "RegisterStaffOrAdm": {
+        "type":"object",
+        "properties":{
+          "user_name": {
+            "type": "string"
+          },
+          "user_lastname": {
+            "type": "string"
+          },
+          "user_email": {
+            "type": "string",
+            "format":"email"
+          },
+          "user_password": {
+            "type": "string"
+          },
+          "confirmpassword": {
+            "type": "string"
+          },
+          "user_birthdate": {
+            "type": "string",
+            "format": "date"
+          },
+          "user_sex": {
+            "type": "string",
+            "enum": ["male","female","other"]
+          }
         }
       },
       "ReturnUser": {
